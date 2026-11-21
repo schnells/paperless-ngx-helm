@@ -1,0 +1,42 @@
+env:
+  TZ: Europe/Berlin
+  PAPERLESS_URL: https://paperless.example.com
+  PAPERLESS_CSRF_TRUSTED_ORIGINS: https://paperless.example.com
+  PAPERLESS_SECRET_KEY:
+    valueFrom:
+      secretKeyRef:
+        name: paperless-secret-key
+        key: secret-key
+  PAPERLESS_REDIS:
+    valueFrom:
+      secretKeyRef:
+        name: paperless-redis
+        key: url
+  PAPERLESS_APPS: allauth.socialaccount.providers.openid_connect
+  PAPERLESS_SOCIALACCOUNT_PROVIDERS:
+    valueFrom:
+      secretKeyRef:
+        name: paperless-oidc
+        key: providers.json
+persistence:
+  data:
+    existingClaim: paperless-ngx-data
+  media:
+    existingClaim: paperless-ngx-media
+  consume:
+    existingClaim: paperless-ngx-consume
+  export:
+    existingClaim: paperless-ngx-export
+ingress:
+  enabled: true
+  className: traefik
+  nameOverride: paperless
+  hosts:
+    - host: paperless.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: paperless-tls
+      hosts:
+        - paperless.example.com

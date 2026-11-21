@@ -1,0 +1,20 @@
+name: Lint and render
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  helm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+      - name: Lint
+        run: helm lint .
+      - name: Render defaults
+        run: helm template test . > /tmp/rendered-defaults.yaml
+      - name: Render test values
+        run: helm template test . -f ci/values-test.yaml > /tmp/rendered-test.yaml

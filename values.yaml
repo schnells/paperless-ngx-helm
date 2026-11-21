@@ -1,0 +1,125 @@
+# Minimal Paperless-ngx chart. See README.md.
+# No database, Redis, Gotenberg or Tika is bundled: Paperless uses SQLite on
+# the data PVC by default; point PAPERLESS_REDIS at Valkey/Redis.
+
+replicaCount: 1
+
+image:
+  registry: ghcr.io
+  repository: paperless-ngx/paperless-ngx
+  # Empty = Chart.appVersion. Renovate updates appVersion, not this value.
+  tag: ""
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Recreate avoids two pods running migrations/consumer against RWO PVCs.
+strategy:
+  type: Recreate
+
+# Extra environment variables. Values can be plain strings or Kubernetes
+# EnvVarSource maps (valueFrom), e.g. a secretKeyRef. See README.
+env: {}
+envFrom: []
+
+# Persistence. If existingClaim is set the chart does not create a PVC.
+persistence:
+  data:
+    enabled: true
+    mountPath: /usr/src/paperless/data
+    existingClaim: ""
+    size: 10Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClass: ""
+    annotations: {}
+  media:
+    enabled: true
+    mountPath: /usr/src/paperless/media
+    existingClaim: ""
+    size: 20Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClass: ""
+    annotations: {}
+  consume:
+    enabled: true
+    mountPath: /usr/src/paperless/consume
+    existingClaim: ""
+    size: 10Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClass: ""
+    annotations: {}
+  export:
+    enabled: true
+    mountPath: /usr/src/paperless/export
+    existingClaim: ""
+    size: 5Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClass: ""
+    annotations: {}
+
+extraVolumes: []
+extraVolumeMounts: []
+
+service:
+  type: ClusterIP
+  port: 8000
+  annotations: {}
+
+ingress:
+  enabled: false
+  # Override the Ingress object name (defaults to the fullname).
+  nameOverride: ""
+  className: ""
+  annotations: {}
+  hosts: []
+  #  - host: paperless.example.com
+  #    paths:
+  #      - path: /
+  #        pathType: Prefix
+  tls: []
+  #  - secretName: paperless-tls
+  #    hosts:
+  #      - paperless.example.com
+
+# Startup gates liveness while migrations / Tantivy indexing run.
+# 40 x 30s = 20 minutes.
+probes:
+  port: 8000
+  startup:
+    enabled: true
+    periodSeconds: 30
+    timeoutSeconds: 1
+    failureThreshold: 40
+  readiness:
+    enabled: true
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+  liveness:
+    enabled: true
+    periodSeconds: 10
+    timeoutSeconds: 1
+    failureThreshold: 3
+
+resources: {}
+
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+
+automountServiceAccountToken: false
+terminationGracePeriodSeconds: 30
+revisionHistoryLimit: 3
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+topologySpreadConstraints: []

@@ -1,0 +1,25 @@
+{{- range $key, $p := .Values.persistence }}
+{{- if and $p.enabled (not $p.existingClaim) }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ printf "%s-%s" (include "paperless-ngx.fullname" $) $key }}
+  labels:
+    {{- include "paperless-ngx.labels" $ | nindent 4 }}
+  annotations:
+    helm.sh/resource-policy: keep
+    {{- with $p.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  accessModes:
+    {{- toYaml $p.accessModes | nindent 4 }}
+  {{- with $p.storageClass }}
+  storageClassName: {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ $p.size }}
+{{- end }}
+{{- end }}

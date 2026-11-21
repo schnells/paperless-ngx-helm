@@ -1,0 +1,15 @@
+{{- $url := "" -}}
+{{- if and .Values.ingress.enabled .Values.ingress.hosts -}}
+{{- with (first .Values.ingress.hosts) -}}
+{{- $url = printf "https://%s" .host -}}
+{{- end -}}
+{{- end -}}
+Paperless-ngx has been installed.
+
+{{- if $url }}
+URL: {{ $url }}
+{{- else }}
+Service: {{ include "paperless-ngx.fullname" . }}.{{ .Release.Namespace }}.svc:{{ .Values.service.port }}
+{{- end }}
+
+Make sure PAPERLESS_URL and PAPERLESS_CSRF_TRUSTED_ORIGINS match the URL above.

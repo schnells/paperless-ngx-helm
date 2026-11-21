@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["(^|/)Chart\\.yaml$"],
+      "matchStrings": ["appVersion:\\s*\"(?<currentValue>[^\"]+)\""],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "paperless-ngx/paperless-ngx",
+      "versioningTemplate": "semver"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+apiVersion: v2
+name: paperless-ngx
+description: Minimal community Helm chart for Paperless-ngx (SQLite, external Redis/Valkey)
+type: application
+version: 0.1.0
+appVersion: "3.5.1"
+kubeVersion: ">=1.25.0-0"
+keywords:
+  - paperless
+  - paperless-ngx
+  - document-management
+  - dms
+  - ocr
+home: https://docs.paperless-ngx.com/
+sources:
+  - https://github.com/paperless-ngx/paperless-ngx
+maintainers:
+  - name: paperless-ngx-helm contributors
+icon: https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/main/docs/assets/favicon.png
+annotations:
+  artifacthub.io/license: MIT

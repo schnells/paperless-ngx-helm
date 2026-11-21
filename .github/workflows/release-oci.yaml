@@ -1,0 +1,29 @@
+name: Release chart (OCI)
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-helm@v4
+        with:
+          version: v3.16.4
+      - name: Lint and package
+        run: |
+          helm lint .
+          helm package . --destination dist
+      - name: Log in to GHCR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io \
+            --username "${{ github.actor }}" --password-stdin
+      - name: Push chart
+        run: helm push dist/*.tgz oci://ghcr.io/${{ github.repository_owner }}/charts
