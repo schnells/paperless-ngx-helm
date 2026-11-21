@@ -191,6 +191,27 @@ Set `PAPERLESS_APPS` to
 through a Secret (as in the example above). The JSON format is documented at
 <https://docs.paperless-ngx.com/configuration/#PAPERLESS_SOCIALACCOUNT_PROVIDERS>.
 
+If your provider advertises both `client_secret_basic` and `client_secret_post`,
+newer allauth versions prefer `client_secret_post`. If your IdP expects basic
+auth (e.g. an Authelia client configured with
+`token_endpoint_auth_method: client_secret_basic`), pin it explicitly:
+
+```json
+{
+  "openid_connect": {
+    "APPS": [
+      {
+        "provider_id": "authelia",
+        "settings": {
+          "server_url": "https://login.example.com/.well-known/openid-configuration",
+          "token_auth_method": "client_secret_basic"
+        }
+      }
+    ]
+  }
+}
+```
+
 ## Main values
 
 | Value | Default | Description |
