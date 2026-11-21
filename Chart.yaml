@@ -11,11 +11,12 @@ keywords:
   - document-management
   - dms
   - ocr
-home: https://docs.paperless-ngx.com/
+home: https://github.com/schnells/paperless-ngx-helm
 sources:
   - https://github.com/paperless-ngx/paperless-ngx
+  - https://github.com/schnells/paperless-ngx-helm
 maintainers:
-  - name: paperless-ngx-helm contributors
+  - name: schnells
 icon: https://raw.githubusercontent.com/paperless-ngx/paperless-ngx/main/docs/assets/favicon.png
 annotations:
   artifacthub.io/license: MIT

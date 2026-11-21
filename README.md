@@ -1,5 +1,9 @@
 # paperless-ngx Helm chart
 
+[![Lint and render](https://github.com/schnells/paperless-ngx-helm/actions/workflows/lint.yaml/badge.svg)](https://github.com/schnells/paperless-ngx-helm/actions/workflows/lint.yaml)
+
+Source: <https://github.com/schnells/paperless-ngx-helm>
+
 A small, community-maintained Helm chart for
 [Paperless-ngx](https://github.com/paperless-ngx/paperless-ngx).
 
@@ -47,6 +51,8 @@ It is easy to audit, has no subcharts, and can be updated by changing a single
 From a local clone:
 
 ```bash
+git clone https://github.com/schnells/paperless-ngx-helm
+cd paperless-ngx-helm
 helm install paperless-ngx . \
   --namespace paperless --create-namespace \
   -f my-values.yaml
@@ -55,7 +61,7 @@ helm install paperless-ngx . \
 From OCI (after publishing, see below):
 
 ```bash
-helm install paperless-ngx oci://ghcr.io/<owner>/charts/paperless-ngx \
+helm install paperless-ngx oci://ghcr.io/schnells/charts/paperless-ngx \
   --version 0.1.0 --namespace paperless
 ```
 
@@ -206,7 +212,7 @@ through a Secret (as in the example above). The JSON format is documented at
 - After merging an app update, bump `version` in `Chart.yaml` (chart SemVer:
   app update = minor, chart-only fix = patch), then tag `vX.Y.Z`.
 - The included workflow publishes the packaged chart to
-  `oci://ghcr.io/<owner>/charts` on a `v*` tag. Alternative: GitHub Pages via
+  `oci://ghcr.io/schnells/charts` on a `v*` tag. Alternative: GitHub Pages via
   [`chart-releaser-action`](https://github.com/helm/chart-releaser-action).
 - CI (`.github/workflows/lint.yaml`) runs `helm lint` and `helm template` with
   defaults and `ci/values-test.yaml`.
